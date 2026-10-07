@@ -3,11 +3,14 @@ import { ethers } from "ethers";
 export const shortAddr = (a) => (a ? `${a.slice(0, 6)}…${a.slice(-4)}` : "—");
 export const shortHash = (h) => (h ? `${h.slice(0, 10)}…${h.slice(-6)}` : "—");
 
-export function formatEth(wei, maxDecimals = 4) {
+// Amounts are truncated, never rounded up. The number of decimals follows the size of the amount, so a
+// 0.000198 ETH payout is not shown as 0.0001 and a tiny fee is not shown as 0.
+export function formatEth(wei, maxDecimals) {
   if (wei === null || wei === undefined) return "—";
-  const s = ethers.formatEther(BigInt(wei));
-  const [int, frac = ""] = s.split(".");
-  const trimmed = frac.slice(0, maxDecimals).replace(/0+$/, "");
+  const v = BigInt(wei);
+  const decimals = maxDecimals ?? (v >= 10n ** 16n ? 4 : v >= 10n ** 14n ? 6 : 9);
+  const [int, frac = ""] = ethers.formatEther(v).split(".");
+  const trimmed = frac.slice(0, decimals).replace(/0+$/, "");
   return trimmed ? `${int}.${trimmed}` : int;
 }
 

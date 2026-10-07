@@ -1,0 +1,46 @@
+'npx hardhat clean' running (wd: C:\Users\luoyu\Desktop\NTU\Semester 3\SC6113\Group Project\contracts)
+'npx hardhat clean --global' running (wd: C:\Users\luoyu\Desktop\NTU\Semester 3\SC6113\Group Project\contracts)
+Problem executing hardhat: ¡ó injected env (0) from .env
+¡ó injected env (0) from .env
+
+'npx hardhat compile --force' running (wd: C:\Users\luoyu\Desktop\NTU\Semester 3\SC6113\Group Project\contracts)
+INFO:Detectors:
+Detector: arbitrary-send-eth
+JobEscrow.withdrawFees(address) (contracts/JobEscrow.sol#306-314) sends eth to arbitrary user
+	Dangerous calls:
+	- (ok,None) = to.call{value: amount}() (contracts/JobEscrow.sol#311)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#functions-that-send-ether-to-arbitrary-destinations
+INFO:Detectors:
+Detector: uninitialized-local
+JobEscrow.createJob(bytes32,uint96[]).total (contracts/JobEscrow.sol#119) is a local variable never initialized
+JobEscrow.rateCounterparty(uint256,uint8).ratee (contracts/JobEscrow.sol#212) is a local variable never initialized
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-local-variables
+INFO:Detectors:
+Detector: unused-return
+DisputeResolution.raiseDispute(uint256,uint8,bytes32) (contracts/DisputeResolution.sol#65-81) ignores return value by (client,freelancer,None) = escrow.getJobParties(jobId) (contracts/DisputeResolution.sol#66)
+DisputeResolution.submitEvidence(uint256,bytes32,string) (contracts/DisputeResolution.sol#84-90) ignores return value by (client,freelancer,None) = escrow.getJobParties(d.jobId) (contracts/DisputeResolution.sol#87)
+DisputeResolution.castVote(uint256,bool) (contracts/DisputeResolution.sol#93-106) ignores return value by (client,freelancer,None) = escrow.getJobParties(d.jobId) (contracts/DisputeResolution.sol#99)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+INFO:Detectors:
+Detector: timestamp
+DisputeResolution.castVote(uint256,bool) (contracts/DisputeResolution.sol#93-106) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp > d.votingDeadline (contracts/DisputeResolution.sol#96)
+DisputeResolution.executeResolution(uint256) (contracts/DisputeResolution.sol#111-130) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp <= d.votingDeadline (contracts/DisputeResolution.sol#121)
+JobEscrow.claimTimeout(uint256,uint8) (contracts/JobEscrow.sol#198-204) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < uint256(m.submittedAt) + reviewPeriod (contracts/JobEscrow.sol#202)
+JobEscrow.markDisputed(uint256,uint8) (contracts/JobEscrow.sol#243-252) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp >= uint256(m.submittedAt) + reviewPeriod (contracts/JobEscrow.sol#247)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in JobEscrow.withdraw() (contracts/JobEscrow.sol#230-237):
+	- (ok,None) = msg.sender.call{value: amount}() (contracts/JobEscrow.sol#234)
+Low level call in JobEscrow.withdrawFees(address) (contracts/JobEscrow.sol#306-314):
+	- (ok,None) = to.call{value: amount}() (contracts/JobEscrow.sol#311)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Slither:. analyzed (21 contracts with 102 detectors), 12 result(s) found

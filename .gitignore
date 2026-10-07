@@ -1,0 +1,13 @@
+node_modules
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+dist
+coverage
+gas-report.txt
+shared/deployments/localhost.json
+shared/deployments/hardhat.json
+contracts/demo-accounts.json
+SC6113 Group Project.md

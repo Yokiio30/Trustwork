@@ -1,0 +1,44 @@
+# Render blueprint for the backend API + indexer. The frontend is deployed separately on Vercel.
+# See docs/DEPLOYMENT.md. Values marked `sync: false` are asked for in the Render dashboard.
+services:
+  - type: web
+    name: trustwork-api
+    runtime: node
+    region: singapore
+    # Free plan: the local disk is wiped on every restart and the instance sleeps when idle. That is fine
+    # because everything on-chain is rebuilt by the indexer and document text is kept in the external
+    # Postgres given by DOCS_DATABASE_URL (see docs/DEPLOYMENT.md). Without that variable the text is lost
+    # on each restart. To use a paid instance instead, set `plan: starter`, add a `disk` mounted at
+    # /var/data and set DB_PATH=/var/data/trustwork.db.
+    plan: free
+    # The whole repo is checked out, so the backend can read ../shared/deployments/sepolia.json.
+    buildCommand: cd backend && npm ci
+    startCommand: cd backend && npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "24" # needs >= 22.13 for the built-in node:sqlite
+      - key: NODE_ENV
+        value: production
+      - key: NETWORK
+        value: sepolia
+      - key: RPC_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false # the Vercel URL, e.g. https://trustwork.vercel.app
+      # Required on the free plan: a free Neon or Supabase Postgres connection string. Keeps document text
+      # (job descriptions, deliverables, evidence) across restarts.
+      - key: DOCS_DATABASE_URL
+        sync: false
+      # 1 keeps the UI responsive on 12 s Sepolia blocks; raise to 2-3 if you see reorg problems.
+      - key: INDEXER_CONFIRMATIONS
+        value: "1"
+      - key: INDEXER_POLL_MS
+        value: "5000"
+      # Starting block range per eth_getLogs call. The indexer halves it automatically (down to 10)
+      # if the provider rejects the range, so this is only a starting point.
+      - key: INDEXER_CHUNK_BLOCKS
+        value: "1000"

@@ -9,7 +9,13 @@ import { useApi, useDocumentTitle } from "../lib/hooks";
 
 const STATUS_COLOR = { Open: "#94a3b8", Funded: "#0ea5e9", InProgress: "#6366f1", Disputed: "#f59e0b", Completed: "#10b981", Cancelled: "#cbd5e1", Terminated: "#f43f5e" };
 const STATUS_LABEL = { InProgress: "In progress", Funded: "Awaiting freelancer", Open: "Awaiting funds" };
-const eth = (n) => `${Number(n).toLocaleString(undefined, { maximumFractionDigits: 4 })} ETH`;
+// Small testnet amounts (e.g. a 0.000004 ETH fee) keep their significant digits instead of showing as 0.
+const eth = (n) => {
+  const v = Number(n);
+  const opts = v !== 0 && Math.abs(v) < 0.01 ? { maximumSignificantDigits: 3 } : { maximumFractionDigits: 4 };
+  return `${v.toLocaleString(undefined, opts)} ETH`;
+};
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 export default function Dashboard() {
   useDocumentTitle("Dashboard");
@@ -28,7 +34,7 @@ export default function Dashboard() {
       <PageHeader title="Dashboard" subtitle="Live platform activity, read from the blockchain by the indexer." />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Jobs" value={s.jobs.total} hint={`${s.users.clients} clients · ${s.users.freelancers} freelancers`} />
+        <Stat label="Jobs" value={s.jobs.total} hint={`${plural(s.users.clients, "client")} · ${plural(s.users.freelancers, "freelancer")}`} />
         <Stat label="Locked in escrow" value={eth(s.volume.lockedEth)} hint="Held by the contract right now" />
         <Stat label="Paid out" value={eth(s.volume.releasedEth)} hint={`Platform fees: ${eth(s.volume.feesEth)} (${s.platformFeePct}%)`} />
         <Stat label="On-chain transactions" value={s.transactions} />

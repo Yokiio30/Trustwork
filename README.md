@@ -3,10 +3,34 @@
 SC6113 group project. Clients lock ETH in a smart contract, freelancers deliver milestone by milestone, and
 independent arbiters settle disputes. The platform never holds the money; the contracts do.
 
+## Submission links
+
+| Item | Link |
+| --- | --- |
+| Live website | https://trustwork-psi.vercel.app |
+| Render (backend API) | https://trustwork-api-c6as.onrender.com/api/health (free plan: the first request after a quiet period can take up to a minute) |
+| Demo video (YouTube) | *to be added* |
+| Network | Ethereum Sepolia test network, chain ID 11155111 |
+| JobEscrow | [0x7851D917fC2E77E085c887181415D877D89acc83](https://sepolia.etherscan.io/address/0x7851D917fC2E77E085c887181415D877D89acc83#code) |
+| DisputeResolution | [0xC6faF73DB585446BE53cE8C7262954B6Bf77c42c](https://sepolia.etherscan.io/address/0xC6faF73DB585446BE53cE8C7262954B6Bf77c42c#code) |
+| Reputation | [0xfe26dfbeAEDfd2c6B5D4408921b4018f180e3B0c](https://sepolia.etherscan.io/address/0xfe26dfbeAEDfd2c6B5D4408921b4018f180e3B0c#code) |
+
+| Submitted file type | Where |
+| --- | --- |
+| Solidity (.sol) | [contracts/contracts/](contracts/contracts/) |
+| ABI | [abi/](abi/) (one JSON file per contract) |
+| HTML, CSS, JS (built) | [frontend/build-output/](frontend/build-output/) |
+| Frontend source (React) | [frontend/src/](frontend/src/) |
+| Backend source (Node.js, Express) | [backend/src/](backend/src/) |
+
+## Repository layout
+
 ```
 contracts/   Solidity (Hardhat): JobEscrow, DisputeResolution, Reputation + tests + deploy/seed scripts
+abi/         ABI of each deployed contract, exported from shared/deployments/sepolia.json
 backend/     Node.js + Express: chain indexer (SQLite), REST API, wallet-signature login
 frontend/    React + Vite + Tailwind: marketplace, job/dispute pages, dashboards, MetaMask integration
+             (build-output/ holds the compiled HTML, CSS and JS)
 e2e/         Browser end-to-end test (Playwright + stand-in wallet)
 shared/      deployments/<network>.json written by the deploy script (addresses + ABIs)
 ```

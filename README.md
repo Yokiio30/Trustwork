@@ -9,7 +9,7 @@ independent arbiters settle disputes. The platform never holds the money; the co
 | --- | --- |
 | Live website | https://trustwork-psi.vercel.app |
 | Render (backend API) | https://trustwork-api-c6as.onrender.com/api/health (free plan: the first request after a quiet period can take up to a minute) |
-| Demo video (YouTube) | *to be added* |
+| Demo video (YouTube) | https://youtu.be/sXw6OwuvufM |
 | Network | Ethereum Sepolia test network, chain ID 11155111 |
 | JobEscrow | [0x7851D917fC2E77E085c887181415D877D89acc83](https://sepolia.etherscan.io/address/0x7851D917fC2E77E085c887181415D877D89acc83#code) |
 | DisputeResolution | [0xC6faF73DB585446BE53cE8C7262954B6Bf77c42c](https://sepolia.etherscan.io/address/0xC6faF73DB585446BE53cE8C7262954B6Bf77c42c#code) |
